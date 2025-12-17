@@ -1,0 +1,12 @@
+# node
+**/node_modules/
+
+# angular build
+**/dist/
+
+# env
+**/.env
+**/.env.*
+
+# logs
+**/logs/
