@@ -1,0 +1,108 @@
+<section class="bg-slate-950 pt-8 pb-6">
+  <div class="max-w-6xl mx-auto px-4 space-y-8">
+    <div class="space-y-2">
+      <p class="text-emerald-400 text-xs uppercase tracking-[0.25em]">
+        CoreByte Tech
+      </p>
+      <h1 class="text-3xl md:text-4xl font-bold text-slate-50 leading-tight">
+        Laptops, PCs armadas y periféricos para tu próximo nivel
+      </h1>
+      <p class="text-slate-300 max-w-2xl text-sm md:text-base">
+        Explora nuestro catálogo de hardware para oficina, gaming y creación de
+        contenido. Arma el setup que siempre quisiste.
+      </p>
+    </div>
+
+    <div class="relative">
+      <app-carousel
+        [autoPlay]="autoPlay"
+        [interval]="3000"
+        [showIndicators]="indicators"
+        [showControls]="indicators"
+      >
+      </app-carousel>
+
+      <button
+        class="absolute bottom-4 right-4 z-20 bg-slate-900/80 hover:bg-slate-800 text-slate-100 rounded-full shadow-lg transition-all duration-200 px-3 py-2 text-xs flex items-center gap-2"
+        (click)="indicators = !indicators"
+      >
+        @if (indicators) {
+        <span>Ocultar controles</span>
+        } @else {
+        <span>Mostrar controles</span>
+        }
+      </button>
+    </div>
+  </div>
+</section>
+<!-- SECCIÓN ACERCA DE NOSOTROS -->
+<section class="bg-slate-900 py-10">
+  <div
+    class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-10 items-center"
+  >
+    <!-- Texto -->
+    <div class="space-y-6">
+      <p class="text-emerald-400 text-xs uppercase tracking-[0.25em]">
+        Acerca de nosotros
+      </p>
+
+      <h2 class="text-2xl md:text-3xl font-bold text-slate-50 leading-tight">
+        Tecnología confiable para trabajo, gaming y creación de contenido
+      </h2>
+
+      <p class="text-slate-300 text-sm md:text-base leading-relaxed">
+        En <span class="font-semibold text-slate-100">CoreByte Tech</span>
+        nos especializamos en ofrecer laptops, PCs armadas y periféricos de alto
+        rendimiento, seleccionados para usuarios exigentes que buscan calidad,
+        potencia y durabilidad.
+      </p>
+
+      <ul class="space-y-3 text-slate-300 text-sm">
+        <li class="flex items-start gap-3">
+          <span class="text-emerald-400">✔</span>
+          Equipos seleccionados y probados
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-emerald-400">✔</span>
+          Componentes originales y garantía
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-emerald-400">✔</span>
+          Envíos seguros y atención personalizada
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-emerald-400">✔</span>
+          Pensado para oficina, gaming y creadores
+        </li>
+      </ul>
+
+      <div class="flex gap-4 pt-4">
+        <a
+          routerLink="/products"
+          class="inline-flex items-center justify-center bg-emerald-500 hover:bg-emerald-600 text-slate-900 font-semibold px-6 py-3 rounded-lg transition-colors"
+        >
+          Ver catálogo
+        </a>
+
+        <a
+          routerLink="/conocenos"
+          class="inline-flex items-center justify-center border border-slate-600 hover:border-slate-400 text-slate-200 px-6 py-3 rounded-lg transition-colors"
+        >
+          Conócenos
+        </a>
+      </div>
+    </div>
+
+    <!-- Imagen -->
+    <div class="relative">
+      <img
+        src="https://images.unsplash.com/photo-1611078489935-0cb964de46d6"
+        alt="Setup tecnológico moderno"
+        class="w-full h-full object-cover rounded-2xl shadow-lg"
+      />
+      <div
+        class="absolute inset-0 rounded-2xl bg-gradient-to-tr from-slate-950/60 via-transparent to-transparent"
+      ></div>
+    </div>
+  </div>
+</section>
