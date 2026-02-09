@@ -2,19 +2,16 @@ import Review from '../models/review.js';
 import Product from '../models/product.js';
 import User from '../models/user.js';
 
-// Crear una nueva review
 const createReview = async (req, res, next) => {
   try {
     const { product, rating, comment } = req.body;
     const user = req.user.userId;
 
-    // Verificar que el producto existe
     const productExists = await Product.findById(product);
     if (!productExists) {
       return res.status(404).json({ message: 'Product not found' });
     }
 
-    // Verificar que el usuario no haya review este producto antes
     const existingReview = await Review.findOne({ user, product });
     if (existingReview) {
       return res.status(400).json({ message: 'You have already reviewed this product' });
@@ -29,7 +26,6 @@ const createReview = async (req, res, next) => {
 
     await newReview.save();
 
-    // Poblar la respuesta con datos del usuario
     await newReview.populate('user', 'displayName');
 
     res.status(201).json({
@@ -41,14 +37,13 @@ const createReview = async (req, res, next) => {
   }
 };
 
-// Obtener todas las reviews de un producto
 const getProductReviews = async (req, res, next) => {
   try {
     const { productId } = req.params;
 
     const reviews = await Review.find({ product: productId })
       .populate('user', 'displayName avatar')
-      .sort({ _id: -1 }); // Más recientes primero
+      .sort({ _id: -1 });
 
     res.status(200).json({
       message: 'Reviews retrieved successfully',
@@ -60,7 +55,6 @@ const getProductReviews = async (req, res, next) => {
   }
 };
 
-// Obtener todas las reviews de un usuario
 const getUserReviews = async (req, res, next) => {
   try {
     const userId = req.user.userId;
@@ -79,7 +73,6 @@ const getUserReviews = async (req, res, next) => {
   }
 };
 
-// Actualizar una review
 const updateReview = async (req, res, next) => {
   try {
     const { reviewId } = req.params;
@@ -91,7 +84,6 @@ const updateReview = async (req, res, next) => {
       return res.status(404).json({ message: 'Review not found' });
     }
 
-    // Verificar que el usuario es el propietario de la review
     if (review.user.toString() !== userId) {
       return res.status(403).json({ message: 'You can only update your own reviews' });
     }
@@ -111,7 +103,6 @@ const updateReview = async (req, res, next) => {
   }
 };
 
-// Eliminar una review
 const deleteReview = async (req, res, next) => {
   try {
     const { reviewId } = req.params;
@@ -122,7 +113,6 @@ const deleteReview = async (req, res, next) => {
       return res.status(404).json({ message: 'Review not found' });
     }
 
-    // Verificar que el usuario es el propietario de la review
     if (review.user.toString() !== userId) {
       return res.status(403).json({ message: 'You can only delete your own reviews' });
     }

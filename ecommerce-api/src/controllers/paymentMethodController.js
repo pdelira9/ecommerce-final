@@ -54,7 +54,6 @@ async function createPaymentMethod(req, res) {
       isDefault = false
     } = req.body;
 
-    // Validaciones básicas
     if (!user || !type) {
       return res.status(400).json({ error: 'User and type are required' });
     }
@@ -64,7 +63,6 @@ async function createPaymentMethod(req, res) {
       return res.status(400).json({ error: 'Invalid payment method type' });
     }
 
-    // Validaciones específicas por tipo
     if (type === 'credit_card' || type === 'debit_card') {
       if (!cardNumber || !cardHolderName || !expiryDate) {
         return res.status(400).json({
@@ -93,7 +91,6 @@ async function createPaymentMethod(req, res) {
       }
     }
 
-    // Si se marca como default, desmarcar otros métodos default del usuario
     if (isDefault) {
       await PaymentMethod.updateMany(
         { user: user, isDefault: true },
@@ -131,7 +128,6 @@ async function updatePaymentMethod(req, res) {
       return res.status(404).json({ message: 'Payment method not found' });
     }
 
-    // Campos permitidos para actualizar
     const allowedFields = ['cardHolderName', 'expiryDate', 'paypalEmail', 'bankName', 'accountNumber', 'isDefault', 'isActive'];
     const filteredUpdate = {};
 
@@ -141,7 +137,6 @@ async function updatePaymentMethod(req, res) {
       }
     }
 
-    // Validaciones específicas según el tipo
     if (paymentMethod.type === 'credit_card' || paymentMethod.type === 'debit_card') {
       if (filteredUpdate.expiryDate && !/^(0[1-9]|1[0-2])\/\d{2}$/.test(filteredUpdate.expiryDate)) {
         return res.status(400).json({ error: 'Expiry date must be in MM/YY format' });
@@ -152,7 +147,6 @@ async function updatePaymentMethod(req, res) {
       }
     }
 
-    // Si se marca como default, desmarcar otros métodos default del usuario
     if (filteredUpdate.isDefault === true) {
       await PaymentMethod.updateMany(
         { user: paymentMethod.user, isDefault: true, _id: { $ne: id } },
@@ -185,13 +179,11 @@ async function setDefaultPaymentMethod(req, res) {
       return res.status(400).json({ message: 'Cannot set inactive payment method as default' });
     }
 
-    // Desmarcar otros métodos default del usuario
     await PaymentMethod.updateMany(
       { user: paymentMethod.user, isDefault: true },
       { isDefault: false }
     );
 
-    // Marcar este como default
     const updatedPaymentMethod = await PaymentMethod.findByIdAndUpdate(
       id,
       { isDefault: true },

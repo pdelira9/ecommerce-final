@@ -4,6 +4,79 @@ import User from "../models/user.js";
 import Category from "../models/category.js";
 import Product from "../models/product.js";
 
+
+const categoryImages = {
+  "Laptops": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=1200&q=80",
+  "PCs de Escritorio": "https://images.unsplash.com/photo-1587202372775-e229f172b9d9?auto=format&fit=crop&w=1200&q=80",
+  "Monitores": "https://images.unsplash.com/photo-1527443154391-507e9dc6c5cc?auto=format&fit=crop&w=1200&q=80",
+  "Teclados y Mouse": "https://images.unsplash.com/photo-1541140532154-b024d705b90a?auto=format&fit=crop&w=1200&q=80",
+  "Accesorios": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80",
+};
+
+const productImages = {
+  "Laptops": [
+    "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1522199755839-a2bacb67c546?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1518779578993-ec3579fee39f?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1508780709619-79562169bc64?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1526378722484-bd91ca387e72?auto=format&fit=crop&w=1200&q=80",
+  ],
+  "PCs de Escritorio": [
+    "https://images.unsplash.com/photo-1587202372775-e229f172b9d9?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1518779578993-ec3579fee39f?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1547082299-de196ea013d6?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1587831990711-23ca6441447b?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1563201180-8c2be2a63f27?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1617777938240-9a1d8e51a47d?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1526378722484-bd91ca387e72?auto=format&fit=crop&w=1200&q=80",
+  ],
+  "Monitores": [
+    "https://images.unsplash.com/photo-1527443154391-507e9dc6c5cc?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1541140532154-b024d705b90a?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1522199755839-a2bacb67c546?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1587202372775-e229f172b9d9?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?auto=format&fit=crop&w=1200&q=80",
+  ],
+  "Teclados y Mouse": [
+    "https://images.unsplash.com/photo-1541140532154-b024d705b90a?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1527814050087-3793815479db?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1516728778615-2d590ea18506?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1555617981-dac3880eac6a?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1200&q=80",
+  ],
+  "Accesorios": [
+    "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1526378722484-bd91ca387e72?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1587202372775-e229f172b9d9?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1522199755839-a2bacb67c546?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1541140532154-b024d705b90a?auto=format&fit=crop&w=1200&q=80",
+  ],
+};
+
+
 async function generateUsers() {
   try {
     const userCount = await User.countDocuments();
@@ -56,6 +129,7 @@ async function generateUsers() {
   }
 }
 
+
 async function generateCategories() {
   try {
     const categoryCount = await Category.countDocuments();
@@ -75,7 +149,7 @@ async function generateCategories() {
     const created = await Category.insertMany(
       mainCategories.map((c) => ({
         ...c,
-        imageUrl: `https://loremflickr.com/640/480/technology?lock=${faker.number.int(999999)}`,
+        imageUrl: categoryImages[c.name] ?? "https://picsum.photos/800/600",
       }))
     );
 
@@ -86,8 +160,8 @@ async function generateCategories() {
   }
 }
 
+
 function build50ProductsByCategory(categoryName) {
-  // 10 productos por categoría = 50 total
   if (categoryName === "Laptops") {
     return [
       { name: "Laptop Core i5 16GB 512GB SSD", description: "Equilibrio perfecto para oficina y estudio.", tag: "laptop" },
@@ -148,7 +222,6 @@ function build50ProductsByCategory(categoryName) {
     ];
   }
 
-  // Accesorios
   return [
     { name: "Pad para Mouse XXL RGB", description: "Mousepad extendido con luz RGB.", tag: "technology" },
     { name: "Base Refrigerante para Laptop", description: "Mejora ventilación y rendimiento.", tag: "laptop,cooling" },
@@ -181,24 +254,26 @@ async function generateProducts() {
 
     for (const category of categories) {
       const items = build50ProductsByCategory(category.name);
+      const imgs = productImages[category.name] ?? ["https://picsum.photos/800/600"];
 
-      for (const item of items) {
+      items.forEach((item, index) => {
         products.push({
           name: item.name,
           description: item.description,
           price: Number(faker.commerce.price({ min: 800, max: 40000 })),
           offer: faker.number.int({ min: 0, max: 30 }),
           stock: faker.number.int({ min: 5, max: 50 }),
-          imageUrl: `https://loremflickr.com/800/600/${item.tag}?lock=${faker.number.int(999999)}`,
+          imageUrl: imgs[index % imgs.length],
           category: category._id,
         });
-      }
+      });
     }
 
     await Product.insertMany(products);
     console.log("Default products created (50)");
   } catch (error) {
     console.error("Error creating products:", error);
+
   }
 }
 

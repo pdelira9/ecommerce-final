@@ -10,7 +10,6 @@ const errorHandler = (err, req, res, next) => {
   const logFilePath = path.join(__dirname, '../../logs/error.log');
   const logMessage = `${dateTime.toISOString()} | ${req.method} ${req.url} | ${err.message} | ${err.stack}\n`;
 
-  // Crear directorio si no existe
   const logDir = path.dirname(logFilePath);
   if (!fs.existsSync(logDir)) {
     fs.mkdirSync(logDir, { recursive: true });
@@ -22,7 +21,6 @@ const errorHandler = (err, req, res, next) => {
     }
   });
 
-  // No enviar respuesta si ya se envió
   if (!res.headersSent) {
     res.status(500).json({
       status: 'error',

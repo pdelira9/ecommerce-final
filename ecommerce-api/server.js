@@ -48,6 +48,12 @@ if (process.env.INITIAL_DATA === "development") {
 
 app.use(errorHandler);
 
-app.listen(process.env.PORT, () => {
+/* app.listen(process.env.PORT, () => {
   console.log(`Server running on http://localhost:${process.env.PORT}`);
+}); */
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });

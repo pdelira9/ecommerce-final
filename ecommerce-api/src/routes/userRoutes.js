@@ -13,12 +13,11 @@ import {
   deleteUser,
   searchUsers,
 } from "../controllers/userController.js";
-import authMiddleware from "../middlewares/authMiddleware.js"; // Middleware de autenticación
-import isAdmin from "../middlewares/isAdminMiddleware.js"; // Middleware de admin
+import authMiddleware from "../middlewares/authMiddleware.js"; 
+import isAdmin from "../middlewares/isAdminMiddleware.js"; 
 
 const router = express.Router();
 
-// Validaciones comunes para actualizar perfil
 const profileValidations = [
   body("displayName")
     .optional()

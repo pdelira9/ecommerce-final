@@ -1,7 +1,6 @@
 import bcrypt from "bcrypt";
 import User from "../models/user.js";
 
-// Obtener perfil del usuario autenticado
 const getUserProfile = async (req, res, next) => {
   try {
     const userId = req.user.userId; // Asumiendo que tienes middleware de autenticación
@@ -21,12 +20,10 @@ const getUserProfile = async (req, res, next) => {
   }
 };
 
-// Obtener todos los usuarios (solo admin)
 const getAllUsers = async (req, res, next) => {
   try {
     const { page = 1, limit = 10, role, isActive } = req.query;
 
-    // Construir filtro
     const filter = {};
     if (role) filter.role = role;
     if (isActive !== undefined) filter.isActive = isActive === "true";
@@ -51,7 +48,6 @@ const getAllUsers = async (req, res, next) => {
   }
 };
 
-// Obtener usuario por ID (solo admin)
 const getUserById = async (req, res, next) => {
   try {
     const { userId } = req.params;
@@ -71,13 +67,11 @@ const getUserById = async (req, res, next) => {
   }
 };
 
-// Actualizar perfil del usuario
 const updateUserProfile = async (req, res, next) => {
   try {
     const userId = req.user.userId;
     const { displayName, email, phone, avatar } = req.body;
 
-    // Verificar si el email ya existe (si se está cambiando)
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -90,7 +84,6 @@ const updateUserProfile = async (req, res, next) => {
       }
     }
 
-    // Actualizar campos
     if (displayName) user.displayName = displayName;
     if (email) user.email = email;
     if (phone) user.phone = phone;
@@ -98,7 +91,6 @@ const updateUserProfile = async (req, res, next) => {
 
     await user.save();
 
-    // Devolver usuario sin password
     const updatedUser = await User.findById(userId).select("-hashPassword");
 
     res.status(200).json({
@@ -110,7 +102,6 @@ const updateUserProfile = async (req, res, next) => {
   }
 };
 
-// Cambiar contraseña
 const changePassword = async (req, res, next) => {
   try {
     const userId = req.user.userId;
@@ -121,13 +112,11 @@ const changePassword = async (req, res, next) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Verificar contraseña actual
     const isMatch = await bcrypt.compare(currentPassword, user.hashPassword);
     if (!isMatch) {
       return res.status(400).json({ message: "Current password is incorrect" });
     }
 
-    // Hash nueva contraseña
     const saltRounds = 10;
     const hashedNewPassword = await bcrypt.hash(newPassword, saltRounds);
 
@@ -142,7 +131,6 @@ const changePassword = async (req, res, next) => {
   }
 };
 
-// Actualizar usuario (solo admin)
 const updateUser = async (req, res, next) => {
   try {
     const { userId } = req.params;
@@ -153,7 +141,6 @@ const updateUser = async (req, res, next) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Verificar si el email ya existe (si se está cambiando)
     if (email && email !== user.email) {
       const emailExists = await User.findOne({ email, _id: { $ne: userId } });
       if (emailExists) {
@@ -161,7 +148,6 @@ const updateUser = async (req, res, next) => {
       }
     }
 
-    // Actualizar campos
     if (displayName) user.displayName = displayName;
     if (email) user.email = email;
     if (phone) user.phone = phone;
@@ -182,7 +168,6 @@ const updateUser = async (req, res, next) => {
   }
 };
 
-// Desactivar usuario
 const deactivateUser = async (req, res, next) => {
   try {
     const userId = req.user.userId;
@@ -203,7 +188,6 @@ const deactivateUser = async (req, res, next) => {
   }
 };
 
-// Activar/Desactivar usuario (solo admin)
 const toggleUserStatus = async (req, res, next) => {
   try {
     const { userId } = req.params;
@@ -229,7 +213,6 @@ const toggleUserStatus = async (req, res, next) => {
   }
 };
 
-// Eliminar cuenta (soft delete)
 const deleteUser = async (req, res, next) => {
   try {
     const { userId } = req.params;
@@ -239,7 +222,6 @@ const deleteUser = async (req, res, next) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Soft delete - solo desactivar
     user.isActive = false;
     await user.save();
 

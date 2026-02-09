@@ -61,7 +61,6 @@ async function createOrder(req, res) {
       shippingCost = 0
     } = req.body;
 
-    // Validaciones básicas
     if (!user || !products || !Array.isArray(products) || products.length === 0) {
       return res.status(400).json({ error: 'User and products array are required' });
     }
@@ -69,7 +68,6 @@ async function createOrder(req, res) {
       return res.status(400).json({ error: 'Shipping address and payment method are required' });
     }
 
-    // Validar estructura de productos
     for (const item of products) {
       if (!item.productId || !item.quantity || !item.price || item.quantity < 1) {
         return res.status(400).json({
@@ -78,7 +76,6 @@ async function createOrder(req, res) {
       }
     }
 
-    // Calcular precio total
     const subtotal = products.reduce((total, item) => total + (item.price * item.quantity), 0);
     const totalPrice = subtotal + shippingCost;
 
@@ -109,7 +106,6 @@ async function updateOrder(req, res) {
     const { id } = req.params;
     const updateData = req.body;
 
-    // Solo permitir actualizar ciertos campos
     const allowedFields = ['status', 'paymentStatus', 'shippingCost'];
     const filteredUpdate = {};
 
@@ -119,7 +115,6 @@ async function updateOrder(req, res) {
       }
     }
 
-    // Si se actualiza shippingCost, recalcular totalPrice
     if (filteredUpdate.shippingCost !== undefined) {
       const order = await Order.findById(id);
       if (order) {
@@ -157,7 +152,6 @@ async function cancelOrder(req, res) {
       return res.status(404).json({ message: 'Order not found' });
     }
 
-    // Solo permitir cancelar si el estado lo permite
     if (order.status === 'delivered' || order.status === 'cancelled') {
       return res.status(400).json({
         message: 'Cannot cancel order with status: ' + order.status
@@ -256,7 +250,6 @@ async function deleteOrder(req, res) {
       return res.status(404).json({ message: 'Order not found' });
     }
 
-    // Solo permitir eliminar órdenes canceladas
     if (order.status !== 'cancelled') {
       return res.status(400).json({
         message: 'Only cancelled orders can be deleted'
