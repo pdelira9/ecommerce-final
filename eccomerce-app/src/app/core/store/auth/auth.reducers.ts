@@ -30,11 +30,10 @@ on(AuthActions.initializeAuthSuccess, (state, { decodedToken }) => {
         token: null,
         refreshToken: null,
         decodedToken: null,
-        isAuthenticated: false,  // ✅ Corregido el typo
+        isAuthenticated: false,
         isLoading: false,
     })),
 
-    // Login
     on(AuthActions.login, (state) => ({
         ...state, 
         isLoading: true,
@@ -58,7 +57,6 @@ on(AuthActions.initializeAuthSuccess, (state, { decodedToken }) => {
         isAuthenticated: false 
     })),
 
-    // Register
     on(AuthActions.register, (state) => ({
         ...state,
         isLoading: true,
@@ -96,7 +94,6 @@ on(AuthActions.initializeAuthSuccess, (state, { decodedToken }) => {
         error,
     })),
 
-    // Logout
     on(AuthActions.logout, () => ({
         ...initialAuthState,
         token: null,

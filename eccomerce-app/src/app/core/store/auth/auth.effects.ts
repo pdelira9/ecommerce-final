@@ -15,7 +15,6 @@ export class AuthEffects {
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
   private readonly toast = inject(ToastService);
-  // private readonly baseUrl = 'http://localhost:3000/api/auth';
   private readonly baseUrl = `${environment.BACK_URL}/auth`;
 
   initializeAuth$ = createEffect(() =>

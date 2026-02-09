@@ -11,8 +11,8 @@ export type Filters = {
 
 export type SearchConfig = {
   q: string;
-  minPrice: number; // 0 = sin filtro
-  maxPrice: number; // 0 = sin filtro
+  minPrice: number;
+  maxPrice: number;
 };
 
 @Injectable({
@@ -21,7 +21,6 @@ export type SearchConfig = {
 export class ProductsService {
   private baseUrl = 'http://localhost:3000/api/products';
 
-  // ✅ Canal compartido para que el buscador afecte la lista
   private readonly searchConfigSubject = new BehaviorSubject<SearchConfig>({
     q: '',
     minPrice: 0,
@@ -47,11 +46,9 @@ export class ProductsService {
     return this.httpClient.get<Product>(`${this.baseUrl}/${id}`);
   }
 
-  // ✅ Autocomplete: devuelve Product[] como tú ya lo usas
   searchProducts(searchConfig: SearchConfig): Observable<Product[]> {
     const f: Filters = { q: (searchConfig.q ?? '').trim() };
 
-    // ✅ 0 = sin filtro, solo enviamos si es > 0
     if (Number(searchConfig.minPrice) > 0) f.minPrice = Number(searchConfig.minPrice);
     if (Number(searchConfig.maxPrice) > 0) f.maxPrice = Number(searchConfig.maxPrice);
 
@@ -62,7 +59,6 @@ export class ProductsService {
     );
   }
 
-  // ✅ Para la LISTA: devuelve ProductResponse (para paginación, total, etc.)
   searchProductsPaged(searchConfig: SearchConfig, page: number = 1, limit: number = 10) {
     const f: any = { q: (searchConfig.q ?? '').trim(), page, limit };
 

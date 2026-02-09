@@ -17,7 +17,7 @@ export class SearchProductsComponent implements OnInit {
   searchProductForm = new FormGroup({
     q: new FormControl('', { nonNullable: true }),
     minPrice: new FormControl(0, { nonNullable: true }),
-    maxPrice: new FormControl(0, { nonNullable: true }), // ✅ sin límite por defecto
+    maxPrice: new FormControl(0, { nonNullable: true }),
   });
 
   searchConfig$ = this.searchProductForm.valueChanges.pipe(
@@ -28,15 +28,12 @@ export class SearchProductsComponent implements OnInit {
         minPrice: Number(config.minPrice ?? 0),
         maxPrice: Number(config.maxPrice ?? 0),
       };
-      // ✅ manda config al servicio para que la LISTA pueda reaccionar
       this.productService.setSearchConfig(normalized);
       return normalized;
     }),
-    // ✅ comparación real (no por referencia)
     distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b))
   );
 
-  // ✅ dropdown autocomplete
   products$ = this.searchConfig$.pipe(
     switchMap((cfg) => this.productService.searchProducts(cfg))
   );
@@ -44,7 +41,6 @@ export class SearchProductsComponent implements OnInit {
   constructor(private productService: ProductsService, private router: Router) {}
 
   ngOnInit(): void {
-    // ✅ restaura al recargar
     const saved = localStorage.getItem('searchConfig');
     if (saved) {
       const parsed = JSON.parse(saved);
@@ -58,7 +54,6 @@ export class SearchProductsComponent implements OnInit {
       );
     }
 
-    // ✅ si escribes en Home, te manda a /products para ver el efecto
     this.searchConfig$.subscribe(() => {
       if (location.pathname !== '/products') {
         this.router.navigateByUrl('/products');

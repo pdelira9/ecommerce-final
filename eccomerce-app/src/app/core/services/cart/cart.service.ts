@@ -62,7 +62,7 @@ export class CartService {
     return this.getResolvedUserIdOnce().pipe(
       switchMap((userId) => {
         if (!userId) {
-          this.toast.error('Debes iniciar sesión para usar el carrito');
+          this.toast.error('Primero inicia sesión para agregar productos');
           return of(null);
         }
 
@@ -86,7 +86,7 @@ export class CartService {
     return this.getResolvedUserIdOnce().pipe(
       switchMap((userId) => {
         if (!userId) {
-          this.toast.error('Debes iniciar sesión');
+          this.toast.error('Primero inicia sesión');
           return of(null);
         }
 

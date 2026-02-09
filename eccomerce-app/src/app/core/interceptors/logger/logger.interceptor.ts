@@ -26,9 +26,9 @@ const getErrorMessage = (error: HttpErrorResponse): string => {
   }
   switch (error.status) {
     case 400:
-      return 'Datos invalidos, verifica la infomración';
+      return 'Datos invalidos, verifica la información';
     case 401:
-      return 'Sesión expirada. Por favor inicie sesión nuevamente';
+      return 'Sesión expirada. Por favor inicia sesión nuevamente';
     case 403:
       return 'No tienes permisos para realizar esta acción';
     case 404:
