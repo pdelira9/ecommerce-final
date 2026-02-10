@@ -24,25 +24,25 @@ export type carouselImages = {
 export class CarouselComponent implements OnInit, OnChanges, OnDestroy {
   @Input() images: carouselImages = [
     {
-      src: 'images/corebyte-setup-1.jpg',
+      src: 'assets/images/corebyte-setup-1.jpg',
       loaded: false,
       loading: false,
       alt: 'Setup gamer con PC y monitores CoreByte Tech',
     },
     {
-      src: 'images/corebyte-laptops.jpg',
+      src: 'assets/images/corebyte-laptops.jpg',
       loaded: false,
       loading: false,
       alt: 'Laptops CoreByte Tech listas para trabajo y gaming',
     },
     {
-      src: 'images/corebyte-monitor.jpg',
+      src: 'assets/images/corebyte-monitor.jpg',
       loaded: false,
       loading: false,
       alt: 'Monitores 2K y 4K para productividad y gaming',
     },
     {
-      src: 'images/corebyte-peripherals.jpg',
+      src: 'assets/images/corebyte-peripherals.jpg',
       loaded: false,
       loading: false,
       alt: 'Teclados mecánicos y mouse gamer CoreByte Tech',
