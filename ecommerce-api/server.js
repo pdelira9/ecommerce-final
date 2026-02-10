@@ -14,10 +14,10 @@ setupGlobalErrorHandlers();
 
 const app = express();
 dbConnection();
-console.log("CORS ORIGIN:", process.env.FRONT_APP_URL);
+console.log("CORS ORIGIN:", process.env.ANGULAR_URL);
 app.use(
   cors({
-    origin: process.env.FRONT_APP_URL,
+    origin: process.env.ANGULAR_URL,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
     optionsSuccessStatus: 200,
