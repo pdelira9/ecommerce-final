@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+/* import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Order, orderArraySchema, orderSchema } from '../../types/Order';
 import { AuthService } from '../auth/auth.service';
@@ -79,3 +79,106 @@ export class OrderService {
     );
   }
 }
+ */
+
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { catchError, throwError } from 'rxjs';
+import { environment } from '../../../../environments/environment';
+
+@Injectable({ providedIn: 'root' })
+export class OrderService {
+  private baseUrl = `${environment.BACK_URL}/orders`;
+
+  constructor(private http: HttpClient) {}
+
+  // Admin
+  getOrders() {
+    return this.http.get<any>(this.baseUrl).pipe(
+      catchError((err) => {
+        const msg = err?.error?.message || 'No se pudieron obtener las órdenes';
+        return throwError(() => new Error(msg));
+      })
+    );
+  }
+
+  // Usuario
+  getOrdersByUser(userId: string) {
+    return this.http.get<any>(`${this.baseUrl}/user/${userId}`).pipe(
+      catchError((err) => {
+        const msg = err?.error?.message || 'No se pudieron obtener tus órdenes';
+        return throwError(() => new Error(msg));
+      })
+    );
+  }
+
+  getOrderById(id: string) {
+    return this.http.get<any>(`${this.baseUrl}/${id}`).pipe(
+      catchError((err) => {
+        const msg = err?.error?.message || 'No se pudo obtener la orden';
+        return throwError(() => new Error(msg));
+      })
+    );
+  }
+
+  createOrder(payload: any) {
+    return this.http.post<any>(this.baseUrl, payload).pipe(
+      catchError((err) => {
+        const msg = err?.error?.message || 'No se pudo crear la orden';
+        return throwError(() => new Error(msg));
+      })
+    );
+  }
+
+  // Admin
+  cancelOrder(id: string) {
+    return this.http.patch<any>(`${this.baseUrl}/${id}/cancel`, {}).pipe(
+      catchError((err) => {
+        const msg = err?.error?.message || 'No se pudo cancelar la orden';
+        return throwError(() => new Error(msg));
+      })
+    );
+  }
+
+  // Admin
+  updateOrderStatus(id: string, status: string) {
+    return this.http.patch<any>(`${this.baseUrl}/${id}/status`, { status }).pipe(
+      catchError((err) => {
+        const msg = err?.error?.message || 'No se pudo actualizar el estado';
+        return throwError(() => new Error(msg));
+      })
+    );
+  }
+
+  // Admin
+  updatePaymentStatus(id: string, paymentStatus: string) {
+    return this.http.patch<any>(`${this.baseUrl}/${id}/payment-status`, { paymentStatus }).pipe(
+      catchError((err) => {
+        const msg = err?.error?.message || 'No se pudo actualizar el pago';
+        return throwError(() => new Error(msg));
+      })
+    );
+  }
+
+  // Admin
+  updateOrder(id: string, payload: any) {
+    return this.http.put<any>(`${this.baseUrl}/${id}`, payload).pipe(
+      catchError((err) => {
+        const msg = err?.error?.message || 'No se pudo actualizar la orden';
+        return throwError(() => new Error(msg));
+      })
+    );
+  }
+
+  // Admin
+  deleteOrder(id: string) {
+    return this.http.delete<any>(`${this.baseUrl}/${id}`).pipe(
+      catchError((err) => {
+        const msg = err?.error?.message || 'No se pudo eliminar la orden';
+        return throwError(() => new Error(msg));
+      })
+    );
+  }
+}
+
+

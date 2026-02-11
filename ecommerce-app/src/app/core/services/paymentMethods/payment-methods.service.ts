@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+/* import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {
   BehaviorSubject,
@@ -123,6 +123,121 @@ export class PaymentService {
         console.error('Error deleting payment method:', error);
         this.paymetMethodListSubject.next([]);
         return of([]);
+      })
+    );
+  }
+}
+ */
+
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, catchError, map, Observable, of, switchMap, take, tap } from 'rxjs';
+import { PaymentMethod, PaymentMethodArraySchema } from '../../types/PaymentMethod';
+import { ToastService } from '../toast/toast.service';
+import { Store } from '@ngrx/store';
+import { selectUserId } from '../../store/auth/auth.selectors';
+import { environment } from '../../../../environments/environment';
+
+@Injectable({ providedIn: 'root' })
+export class PaymentService {
+  private baseUrl = `${environment.BACK_URL}/payment-methods`;
+
+  private paymetMethodListSubject = new BehaviorSubject<PaymentMethod[]>([]);
+  paymetMethods$ = this.paymetMethodListSubject.asObservable();
+
+  constructor(
+    private http: HttpClient,
+    private store: Store,
+    private toast: ToastService
+  ) {
+    this.loadPayMethods();
+  }
+
+  private getUserIdOnce(): Observable<string> {
+    return this.store.select(selectUserId).pipe(
+      take(1),
+      map((id) => id ?? '')
+    );
+  }
+
+  loadPayMethods() {
+    this.getUserIdOnce().pipe(
+      switchMap((id) => {
+        if (!id) return of([]);
+        return this.getPayMethodbyUser(id).pipe(catchError(() => of([])));
+      })
+    ).subscribe((methods) => this.paymetMethodListSubject.next(methods));
+  }
+
+  getPayMethodbyUser(id: string): Observable<PaymentMethod[]> {
+    return this.http.get(`${this.baseUrl}/user/${id}`).pipe(
+      map((data) => {
+        const response = PaymentMethodArraySchema.safeParse(data);
+        return response.success ? response.data : [];
+      })
+    );
+  }
+
+  addPaymentMethod(payment: PaymentMethod): Observable<PaymentMethod[]> {
+    return this.getUserIdOnce().pipe(
+      switchMap((id) => {
+        if (!id) return of([]);
+        const data = { ...payment, user: id };
+
+        return this.http.post(`${this.baseUrl}`, data).pipe(
+          switchMap(() => this.getPayMethodbyUser(id)),
+          tap((updated) => {
+            this.toast.success('Método de pago agregado');
+            this.paymetMethodListSubject.next(updated);
+          }),
+          catchError((err) => {
+            console.error(err);
+            this.toast.error('No se pudo agregar el método de pago');
+            return of([]);
+          })
+        );
+      })
+    );
+  }
+
+  editPaymentMethod(payment: PaymentMethod): Observable<PaymentMethod[]> {
+    return this.getUserIdOnce().pipe(
+      switchMap((id) => {
+        if (!id) return of([]);
+
+        return this.http.put(`${this.baseUrl}/${payment._id}`, payment).pipe(
+          switchMap(() => this.getPayMethodbyUser(id)),
+          tap((updated) => {
+            this.toast.success('Método de pago actualizado');
+            this.paymetMethodListSubject.next(updated);
+          }),
+          catchError((err) => {
+            console.error(err);
+            this.toast.error('No se pudo actualizar el método de pago');
+            return of([]);
+          })
+        );
+      })
+    );
+  }
+
+  deletePaymentMethod(paymentMethodId: string): Observable<PaymentMethod[]> {
+    return this.getUserIdOnce().pipe(
+      switchMap((userId) => {
+        if (!userId) return of([]);
+
+        return this.http.delete(`${this.baseUrl}/${paymentMethodId}`).pipe(
+          switchMap(() => this.getPayMethodbyUser(userId)),
+          tap((updated) => {
+            this.toast.success('Método de pago eliminado');
+            this.paymetMethodListSubject.next(updated ?? []);
+          }),
+          catchError((err) => {
+            console.error(err);
+            this.toast.error('No se pudo eliminar el método de pago');
+            return of([]);
+          })
+        );
       })
     );
   }
