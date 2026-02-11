@@ -9,7 +9,7 @@
         <div class="bg-white shadow rounded-lg p-6">
           <div class="flex items-center justify-between mb-4">
             <h2 class="text-xl font-semibold">Dirección de envío</h2>
-            <a routerLink="/user/shipping-address" class="text-sm text-blue-600 hover:underline">
+            <a routerLink="/user/shipping_address" class="text-sm text-blue-600 hover:underline">
               Administrar
             </a>
           </div>
@@ -17,7 +17,7 @@
           @if (shippingAddresses$ | async; as addresses) {
             @if (addresses.length === 0) {
               <p class="text-gray-600 text-sm mb-2">No tienes direcciones registradas.</p>
-              <a routerLink="/user/shipping-address" class="text-sm text-blue-600 hover:underline">
+              <a routerLink="/user/shipping_address" class="text-sm text-blue-600 hover:underline">
                 Agregar una dirección
               </a>
             } @else {
@@ -64,7 +64,7 @@
 
             @if (payments.length === 0) {
               <p class="text-gray-600 text-sm mt-3">No tienes métodos de pago. Agrega uno en “Mi Cuenta”.</p>
-              <a routerLink="/user/paymethods" class="text-sm text-blue-600 hover:underline">
+              <a routerLink="/user/paymentmethods" class="text-sm text-blue-600 hover:underline">
                 Agregar método de pago
               </a>
             }

@@ -33,7 +33,7 @@ export class RegisterFormComponent {
       label: 'Nombre de usuario',
       fieldId: 'displayName',
       type: 'text',
-      placeholder: 'corebyte_user',
+      placeholder: 'Aqui pon tu nombre',
       required: true,
     },
     {
@@ -54,7 +54,7 @@ export class RegisterFormComponent {
       label: 'telefono',
       fieldId: 'phone',
       type: 'text',
-      placeholder: '1234567890',
+      placeholder: 'Tu número a 10 dígitos',
       required: true,
     },
     {
