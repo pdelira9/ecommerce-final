@@ -33,7 +33,7 @@ export class RegisterFormComponent {
       label: 'Nombre de usuario',
       fieldId: 'displayName',
       type: 'text',
-      placeholder: 'Aqui pon tu nombre',
+      placeholder: 'Aquí pon tu nombre',
       required: true,
     },
     {
@@ -51,7 +51,7 @@ export class RegisterFormComponent {
       required: true,
     },
     {
-      label: 'telefono',
+      label: 'teléfono',
       fieldId: 'phone',
       type: 'text',
       placeholder: 'Tu número a 10 dígitos',
@@ -162,7 +162,7 @@ export class RegisterFormComponent {
       return 'Este campo es requerido';
     }
     if (control.hasError('email')) {
-      return 'Email no valido';
+      return 'Email no válido';
     }
     if (control.hasError('emailTaken')) {
       return 'Este usuario ya existe';
@@ -171,7 +171,7 @@ export class RegisterFormComponent {
       return 'Error del servidor, intente en otro momento';
     }
     if (control.hasError('invalid_phone')) {
-      return 'Telefono no valido';
+      return 'Teléfono no válido';
     }
     if (
       (controlName ==='password' || controlName ==='repeatPassword')
