@@ -30,7 +30,7 @@ export class CarouselComponent implements OnInit, OnChanges, OnDestroy {
       alt: 'Setup gamer con PC y monitores CoreByte Tech',
     },
     {
-      src: 'assets/images/corebyte-laptops.jpg',
+      src: 'assets/images/corebyte-laptop.jpg',
       loaded: false,
       loading: false,
       alt: 'Laptops CoreByte Tech listas para trabajo y gaming',
