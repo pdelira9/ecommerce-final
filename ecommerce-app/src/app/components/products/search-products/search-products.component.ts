@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ProductsService, SearchConfig } from '../../../core/services/products/products.service';
+import {
+  ProductsService,
+  SearchConfig,
+} from '../../../core/services/products/products.service';
 import { debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, ɵEmptyOutletComponent } from '@angular/router';
 
 @Component({
   selector: 'app-search-products',
@@ -13,7 +16,6 @@ import { Router } from '@angular/router';
   styleUrl: './search-products.component.css',
 })
 export class SearchProductsComponent implements OnInit {
-
   searchProductForm = new FormGroup({
     q: new FormControl('', { nonNullable: true }),
     minPrice: new FormControl(0, { nonNullable: true }),
@@ -31,16 +33,19 @@ export class SearchProductsComponent implements OnInit {
       this.productService.setSearchConfig(normalized);
       return normalized;
     }),
-    distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b))
+    distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)),
   );
 
   products$ = this.searchConfig$.pipe(
-    switchMap((cfg) => this.productService.searchProducts(cfg))
+    switchMap((cfg) => this.productService.searchProducts(cfg)),
   );
 
-  constructor(private productService: ProductsService, private router: Router) {}
+  constructor(
+    private productService: ProductsService,
+    private router: Router,
+  ) {}
 
-  ngOnInit(): void {
+  /*   ngOnInit(): void {
     const saved = localStorage.getItem('searchConfig');
     if (saved) {
       const parsed = JSON.parse(saved);
@@ -59,5 +64,28 @@ export class SearchProductsComponent implements OnInit {
         this.router.navigateByUrl('/products');
       }
     });
+  } */
+  ngOnInit(): void {
+    const saved = localStorage.getItem('searchConfig');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      this.searchProductForm.patchValue(
+        {
+          q: parsed.q ?? '',
+          minPrice: Number(parsed.minPrice ?? 0),
+          maxPrice: Number(parsed.maxPrice ?? 0),
+        },
+        { emitEvent: true },
+      );
+    }
+
+    this.searchProductForm
+      .get('q')!
+      .valueChanges.pipe(debounceTime(250), distinctUntilChanged())
+      .subscribe((q) => {
+        if ((q ?? '').trim().length > 0 && location.pathname !== '/products') {
+          this.router.navigateByUrl('/products');
+        }
+      });
   }
 }
